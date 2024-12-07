@@ -1,3 +1,4 @@
+import ast
 import sys
 import csv
 from constraint import Problem
@@ -12,9 +13,9 @@ def leer_datos(ruta_fichero):
     tam_matriz = tuple(map(int, lineas[1].split("x")))
 
     # Leer posiciones de talleres y parkings
-    talleres_std = eval(lineas[2].split(":")[1].strip())
-    talleres_spc = eval(lineas[3].split(":")[1].strip())
-    parkings = eval(lineas[4].split(":")[1].strip())
+    talleres_std = ast.literal_eval(lineas[2].split(":")[1].strip())
+    talleres_spc = ast.literal_eval(lineas[3].split(":")[1].strip())
+    parkings = ast.literal_eval(lineas[4].split(":")[1].strip())
 
     # Leer información de los aviones
     aviones = []
