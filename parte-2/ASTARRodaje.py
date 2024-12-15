@@ -275,26 +275,25 @@ if plan is None:
 #######################################################################
 # Generar fichero de salida
 import os
+
+# Obtener el directorio del archivo de entrada
+input_dir = os.path.dirname(map_path)
 map_name = os.path.basename(map_path).split('.')[0]
 
-output_file = f"{map_name}-{num_heuristica}.output"
-stat_file = f"{map_name}-{num_heuristica}.stat"
+# Crear las rutas de los archivos de salida en el mismo directorio del archivo de entrada
+output_file = os.path.join(input_dir, f"{map_name}-{num_heuristica}.output")
+stat_file = os.path.join(input_dir, f"{map_name}-{num_heuristica}.stat")
 
 # Escribimos la solución
 with open(output_file, 'w') as f_out:
     for avion_plan in plan:
-        # Ejemplo de formateo:
-        # (3,3) → (3,2) → (3,1) ↑ ...
-        # Aquí simplemente imprimimos las posiciones, incluyendo si hay esperas:
         line = ""
         for idx, pos in enumerate(avion_plan):
             if idx > 0:
-                # Determinar movimiento:
-                prev = avion_plan[idx-1]
+                prev = avion_plan[idx - 1]
                 dx = pos[0] - prev[0]
                 dy = pos[1] - prev[1]
                 if dx == 0 and dy == 0:
-                    # Espera
                     line += " w"
                 elif dx == -1:
                     line += " ↑"
@@ -304,7 +303,6 @@ with open(output_file, 'w') as f_out:
                     line += " ←"
                 elif dy == 1:
                     line += " →"
-            # Siempre escribir la posición actual
             line += f" ({pos[0]},{pos[1]})"
         f_out.write(line.strip() + "\n")
 
