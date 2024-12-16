@@ -1,6 +1,6 @@
-Franjas: 2
+Franjas: 3
 5x5
-STD: []
+STD: [(1, 1)]
 SPC: [(2, 2)]
 PRK: [(0, 0), (0, 1)]
-1-STD-T-0-1
+1-STD-T-1-1
