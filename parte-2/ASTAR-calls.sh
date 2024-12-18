@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Ruta absoluta del script Python
-SCRIPT="/home/liangji/heuristica/parte-2/ASTARRodaje.py"
+SCRIPT="./ASTARRodaje.py"
 
 # Ruta absoluta del directorio donde están los mapas
-MAP_DIR="/home/liangji/heuristica/parte-2/ASTAR-tests"
+MAP_DIR="./ASTAR-tests"
 
 # Heurísticas a usar
 HEURISTICAS=(1 2)
