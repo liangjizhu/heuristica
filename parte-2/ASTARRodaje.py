@@ -3,7 +3,6 @@
 
 import sys
 import time
-import heapq
 from collections import deque
 
 #######################################################################
@@ -123,6 +122,61 @@ def heuristica_2(estado):
 if num_heuristica == 2:
     precalcular_distancias()
 
+###############################################################################
+# Implementación de una estructura de min-heap sin usar heapq
+###############################################################################
+class MinHeap:
+    def __init__(self):
+        self.data = []  # almacenará tuplas del tipo (f, g, state, parent)
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def push(self, element):
+        # element es una tupla (f, g, state, parent)
+        self.data.append(element)
+        self._sift_up(len(self.data)-1)
+    
+    def pop(self):
+        # Extrae el elemento con menor f
+        if not self.data:
+            return None
+        # Intercambiamos el primer con el último
+        self._swap(0, len(self.data)-1)
+        elem = self.data.pop()  # ahora elem es el que era el root
+        if self.data:
+            self._sift_down(0)
+        return elem
+    
+    def _sift_up(self, idx):
+        # Ajustar hacia arriba
+        parent = (idx - 1) // 2
+        while idx > 0 and self.data[idx][0] < self.data[parent][0]:
+            self._swap(idx, parent)
+            idx = parent
+            parent = (idx - 1) // 2
+    
+    def _sift_down(self, idx):
+        # Ajustar hacia abajo
+        length = len(self.data)
+        while True:
+            left = 2 * idx + 1
+            right = 2 * idx + 2
+            smallest = idx
+            
+            if left < length and self.data[left][0] < self.data[smallest][0]:
+                smallest = left
+            if right < length and self.data[right][0] < self.data[smallest][0]:
+                smallest = right
+            if smallest == idx:
+                break
+            
+            self._swap(idx, smallest)
+            idx = smallest
+
+    def _swap(self, i, j):
+        self.data[i], self.data[j] = self.data[j], self.data[i]
+
 #######################################################################
 # Estado y búsqueda A*
 #######################################################################
@@ -199,22 +253,18 @@ def busqueda_a_estrella():
     start = estado_inicial
     heuristica_inicial = heuristica(start)
     
-    # Estructura de A*: cola de prioridad
-    # Cada elemento: (f, g, state, parent)
-    # parent = (padre, acciones que llevaron a este estado)
-    # Aquí guardaremos solo padre y la acción tomada por cada avión
-    open_list = []
-    heapq.heappush(open_list, (heuristica_inicial, 0, start, None))
-    visited = set()
-    visited.add(start)
+    # Estructura de A*: cola de prioridad usando nuestra propia implementación
+    open_list = MinHeap()
+    open_list.push((heuristica_inicial, 0, start, None))
+    visited = set([start])
 
     parents = {start: None}
 
     nodos_expandidos = 0
     start_time = time.time()
 
-    while open_list:
-        f, g, current, _ = heapq.heappop(open_list)
+    while len(open_list) > 0:
+        f, g, current, _ = open_list.pop()
         nodos_expandidos += 1
 
         if es_objetivo(current):
@@ -229,9 +279,9 @@ def busqueda_a_estrella():
                 gn = g + 1
                 fn = gn + heuristica(succ)
                 parents[succ] = current
-                heapq.heappush(open_list, (fn, gn, succ, None))
+                open_list.push((fn, gn, succ, None))
 
-    return None, None, None, None, None  # Sin solución
+    return None, None, None, None, None # Sin solución
 
 def reconstruir_solucion(goal_state, parents):
     # Reconstruye la secuencia de estados desde el estado objetivo hasta el inicial.
