@@ -1,0 +1,15 @@
+N. Sol: 7
+Solución 1:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), SPC(3,3), STD(2,2)
+Solución 2:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), SPC(3,3), STD(1,1)
+Solución 3:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), SPC(3,3), SPC(3,3)
+Solución 4:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), STD(2,2), STD(2,2)
+Solución 5:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), STD(2,2), SPC(3,3)
+Solución 6:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), STD(1,1), STD(1,1)
+Solución 7:
+1-JMB-T-2-2: SPC(3,3), SPC(3,3), STD(1,1), SPC(3,3)
