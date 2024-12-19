@@ -103,7 +103,7 @@ def main():
         for t in range(franjas):
             problem.addVariable(f"T_{avion['id']}_{t}", dominio)
 
-    # Restricciones (sin cambios)
+    # -------- Restricciones --------
     def capacidad_taller(*args):
         talleres_ocupados = [pos for pos in args if pos in talleres_std + talleres_spc]
         return all(talleres_ocupados.count(pos) <= 2 for pos in talleres_ocupados)
@@ -184,17 +184,12 @@ def main():
                 if pos in talleres_spc:
                     tareas_restantes = max(0, tareas_restantes - 1)
                 # Si hay tareas pendientes, sin T2 restantes, podría hacer T1 en STD
-                if pos in talleres_std and avion["t2"] == 0:
+                elif pos in talleres_std and avion["t2"] == 1:
                     tareas_restantes = max(0, tareas_restantes - 1)
-        # 1. Si quedan tareas pendientes, la solución es inválida
-        if tareas_restantes > 0:
-            return False
-
-        # 2. Si las tareas ya se han completado, el avión debe acabar en parking en la última franja
-        if tareas_restantes == 0 and positions[i][-1] not in parkings:
-            return False
-
-    return True
+                # Si aún hay tareas pendientes pero el avión está en parking, no se cumple
+                elif tareas_restantes > 0 and pos in parkings:
+                    return False
+        return True
 
 
     def franjas_consecutivas(var1, var2):
@@ -227,10 +222,6 @@ def main():
             all_vars
         )
 
-    # Esta forma de añadir sin_tareas_en_parkings es compleja y probablemente deba ser revisada.
-    # Es preferible añadirla fuera del main o ajustar la lógica.
-    # Si ya estaba funcionando en el código original, se asume correcto.
-    # De lo contrario, habría que replantear cómo se pasan los argumentos a esa función.
 
     for avion in aviones:
         problem.addConstraint(
