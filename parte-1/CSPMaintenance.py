@@ -184,12 +184,17 @@ def main():
                 if pos in talleres_spc:
                     tareas_restantes = max(0, tareas_restantes - 1)
                 # Si hay tareas pendientes, sin T2 restantes, podría hacer T1 en STD
-                elif pos in talleres_std and avion["t2"] == 0:
+                if pos in talleres_std and avion["t2"] == 0:
                     tareas_restantes = max(0, tareas_restantes - 1)
-                # Si aún hay tareas pendientes pero el avión está en parking, no se cumple
-                elif tareas_restantes > 0 and pos in parkings:
-                    return False
-        return True
+        # 1. Si quedan tareas pendientes, la solución es inválida
+        if tareas_restantes > 0:
+            return False
+
+        # 2. Si las tareas ya se han completado, el avión debe acabar en parking en la última franja
+        if tareas_restantes == 0 and positions[i][-1] not in parkings:
+            return False
+
+    return True
 
 
     def franjas_consecutivas(var1, var2):
