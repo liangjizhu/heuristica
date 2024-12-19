@@ -1,36 +1,53 @@
-import ast
 import sys
 import csv
 from constraint import Problem
+
+def parse_posiciones(linea):
+    # Esta función toma una línea del tipo:
+    # "STD:(0,1) (1,0) (1,1) ..."
+    # y devuelve una lista de tuplas [(0,1), (1,0), (1,1), ...]
+    partes = linea.split(":")
+    if len(partes) < 2:
+        return []
+    posiciones_str = partes[1].strip()
+    if not posiciones_str:
+        return []
+    tuplas_str = posiciones_str.split()
+    posiciones = []
+    for t_str in tuplas_str:
+        # t_str es algo como "(0,1)"
+        t_str = t_str.strip("()")
+        r, c = t_str.split(",")
+        posiciones.append((int(r), int(c)))
+    return posiciones
 
 def leer_datos(ruta_fichero):
     with open(ruta_fichero, 'r') as f:
         lineas = [linea.strip() for linea in f if linea.strip()]  # Eliminar líneas vacías
 
     # Leer las franjas horarias y tamaño de la matriz
+    # Ej: "Franjas: 4"  -> franjas = 4
     franjas = int(lineas[0].split(":")[1].strip())
+    # Ej: "5x5" -> tam_matriz = (5,5)
     tam_matriz = tuple(map(int, lineas[1].split("x")))
 
     # Leer posiciones de talleres y parkings
-    def parse_lista(linea):
-        try:
-            return ast.literal_eval(linea.split(":")[1].strip())
-        except (IndexError, SyntaxError):
-            return []  # Si está vacío, devuelve una lista vacía
-
-    talleres_std = parse_lista(lineas[2]) if len(lineas) > 2 else []
-    talleres_spc = parse_lista(lineas[3]) if len(lineas) > 3 else []
-    parkings = parse_lista(lineas[4]) if len(lineas) > 4 else []
+    # Ej: "STD:(0,1) (1,0) ..."
+    talleres_std = parse_posiciones(lineas[2]) if len(lineas) > 2 else []
+    talleres_spc = parse_posiciones(lineas[3]) if len(lineas) > 3 else []
+    parkings = parse_posiciones(lineas[4]) if len(lineas) > 4 else []
 
     # Leer información de los aviones
     aviones = []
+    # A partir de la línea 5 en adelante:
     for linea in lineas[5:]:
-        if "-" in linea:  # Verificar que la línea tenga el formato correcto
+        if "-" in linea:
+            # Ej: "1-JMB-T-2-2"
             id_, tipo, restr, t1, t2 = linea.split("-")
             aviones.append({
                 "id": id_,
                 "tipo": tipo,
-                "restr": restr == "T",
+                "restr": (restr == "T"),  # True/False
                 "t1": int(t1),
                 "t2": int(t2)
             })
@@ -45,9 +62,15 @@ def escribir_salida(ruta_salida, soluciones, aviones):
         for i, solucion in enumerate(soluciones, start=1):
             writer.writerow([f"Solución {i}:"])
             for avion in aviones:
-                restr_str = "T" if avion["restr"] else "F"  # Reflejar el valor real de la restricción
+                restr_str = "T" if avion["restr"] else "F"
                 fila = [f"{avion['id']}-{avion['tipo']}-{restr_str}-{avion['t1']}-{avion['t2']}:"]
-                for t in range(len(soluciones[0]) // len(aviones)):
+
+                # Cantidad de franjas = len(soluciones[0]) // len(aviones)
+                # Esto asume que cada avión tiene la misma cantidad de variables
+                # Si franjas = n, entonces para cada avión hay n variables T_avionID_t
+                numero_franjas = len(soluciones[0]) // len(aviones)
+
+                for t in range(numero_franjas):
                     fila.append(str(solucion[f"T_{avion['id']}_{t}"]))
                 writer.writerow(fila)
 
@@ -162,8 +185,6 @@ def main():
             lambda *variables, avion_id=avion["id"], restr=avion["restr"]: orden_tareas_correcto(avion_id, restr, *variables),
             [f"T_{avion['id']}_{t}" for t in range(franjas)]
         )
-
-
 
     # Restricción 6: Dos aviones Jumbo no pueden ser adyacentes en la misma franja
     def jumbo_no_adyacente(*args):
