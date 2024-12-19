@@ -1,6 +1,7 @@
-import ast
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import sys
-import csv
 from constraint import Problem
 
 def parse_posiciones(linea):
