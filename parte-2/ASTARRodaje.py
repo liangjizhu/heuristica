@@ -357,7 +357,7 @@ with open(output_file, 'w') as f_out:
         f_out.write(line.strip() + "\n")
 
 with open(stat_file, 'w') as f_stat:
-    f_stat.write(f"Tiempo total: {int(tiempo_total)}s\n")
+    f_stat.write(f"Tiempo total: {float(tiempo_total)}s\n")
     f_stat.write(f"Makespan: {makespan}\n")
     f_stat.write(f"h inicial: {h_inicial}\n")
     f_stat.write(f"Nodos expandidos: {nodos_expandidos}\n")
