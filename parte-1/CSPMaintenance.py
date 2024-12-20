@@ -166,30 +166,40 @@ def main():
 
     def sin_tareas_en_parkings(aviones, franjas, vals, talleres_std, talleres_spc, parkings):
         n_aviones = len(aviones)
-        # Reconstruimos positions[avion][t]
         positions = [[None]*franjas for _ in range(n_aviones)]
-        # Asumimos que el orden en all_vars fue por cada t y por cada avion en orden aviones
-        # Ej: T_avion1_0, T_avion2_0, ..., T_avionN_0, T_avion1_1, ...
+
+        # Reconstruimos la matriz de posiciones para cada avión y franja horaria
         for t in range(franjas):
             for i, avion in enumerate(aviones):
                 positions[i][t] = vals[t*n_aviones + i]
 
         for i, avion in enumerate(aviones):
-            tareas_restantes = avion["t1"] + avion["t2"]
-            for pos in positions[i]:
-                # Si no hay tareas pendientes y no está en parking
-                if tareas_restantes == 0 and pos not in parkings:
-                    return False
-                # Si hay tareas pendientes y está en SPC
-                if pos in talleres_spc:
-                    tareas_restantes = max(0, tareas_restantes - 1)
-                # Si hay tareas pendientes, sin T2 restantes, podría hacer T1 en STD
-                elif pos in talleres_std and avion["t2"] == 1:
-                    tareas_restantes = max(0, tareas_restantes - 1)
-                # Si aún hay tareas pendientes pero el avión está en parking, no se cumple
-                elif tareas_restantes > 0 and pos in parkings:
+            tareas_tipo2 = avion["t2"]
+            tareas_tipo1 = avion["t1"]
+            for t, pos in enumerate(positions[i]):
+                # Si no hay tareas pendientes, debe estar en un parking
+                if tareas_tipo2 == 0 and tareas_tipo1 == 0:
+                    if pos not in parkings:
+                        return False
+                # Si hay tareas pendientes y el avión está en un taller especializado
+                elif tareas_tipo2 > 0:
+                    if pos in talleres_spc:
+                        tareas_tipo2 = max(0, tareas_tipo2 - 1)
+                    else:
+                        # Si no está en un taller especializado, es inválido
+                        return False
+                # Si hay tareas tipo 1 pendientes, puede estar en un taller estándar o especializado
+                elif tareas_tipo1 > 0:
+                    if pos in talleres_std or (pos in talleres_spc and tareas_tipo2 == 0):
+                        tareas_tipo1 = max(0, tareas_tipo1 - 1)
+                    else:
+                        # Si no está en un taller válido, es inválido
+                        return False
+                # Si aún hay tareas pendientes y el avión está en un parking, es inválido
+                elif (tareas_tipo1 > 0 or tareas_tipo2 > 0) and pos in parkings:
                     return False
         return True
+
 
 
     def franjas_consecutivas(var1, var2):

@@ -1,4 +1,4 @@
-Franjas: 2
+Franjas: 3
 3x3
 STD: (0,0) (0,1) (1,0)
 SPC: 
