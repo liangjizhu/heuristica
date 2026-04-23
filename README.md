@@ -1,100 +1,113 @@
+[# English](README.en.md) | [Español](README.md) | [中文](README.zh.md)
+
 # heuristica
 
-## Introduction
+## Introducción
 
-This repository contains Python scripts for solving constraint satisfaction problems and pathfinding problems. The scripts are organized into different directories based on their functionality and purpose.
+Este repositorio contiene scripts en Python para resolver problemas de **satisfacción de restricciones (CSP)** y problemas de **búsqueda de caminos**. Los scripts están organizados en distintos directorios según su funcionalidad y propósito.
 
-## Repository Structure
+## Estructura del repositorio
 
-The repository is structured as follows:
+El repositorio se organiza de la siguiente forma:
 
-- `enunciado/`: Contains various Python scripts for different problems.
-  - `alumnos.py`: Script for solving a constraint satisfaction problem involving students.
-  - `n-queens.py`: Script for solving the N-queens problem using constraint processing.
-  - `n-queens-fun.py`: Modified version of `n-queens.py` with a different approach.
-  - `sum-words.py`: Script for solving a sum-words brain teaser using constraint processing.
-- `parte-1/`: Contains scripts and test files for the first part of the project.
-  - `CSP-calls.sh`: Shell script for running tests related to constraint satisfaction problems.
-  - `CSP-tests/`: Directory containing test files for constraint satisfaction problems.
-  - `CSPMaintenance.py`: Python script for solving maintenance scheduling problems using constraint processing.
-- `parte-2/`: Contains scripts and test files for the second part of the project.
-  - `ASTAR-calls.sh`: Shell script for running tests related to pathfinding problems.
-  - `ASTAR-tests/`: Directory containing test files for pathfinding problems.
-  - `ASTARRodaje.py`: Python script for solving pathfinding problems using the A* algorithm.
-- `.gitignore`: Specifies files and directories to be ignored by Git.
-- `requirements.txt`: Lists the dependencies required for the project.
+- `enunciado/`: Contiene varios scripts de Python para distintos problemas.
+  - `alumnos.py`: Script para resolver un CSP relacionado con estudiantes.
+  - `n-queens.py`: Script para resolver el problema de las N reinas mediante procesamiento de restricciones.
+  - `n-queens-fun.py`: Versión modificada de `n-queens.py` con un enfoque diferente.
+  - `sum-words.py`: Script para resolver el acertijo “sum-words” mediante procesamiento de restricciones.
+- `parte-1/`: Contiene scripts y ficheros de prueba para la primera parte del proyecto.
+  - `CSP-calls.sh`: Script de shell para ejecutar pruebas relacionadas con CSP.
+  - `CSP-tests/`: Directorio con ficheros de prueba para CSP.
+  - `CSPMaintenance.py`: Script en Python para resolver problemas de planificación de mantenimiento mediante restricciones.
+- `parte-2/`: Contiene scripts y ficheros de prueba para la segunda parte del proyecto.
+  - `ASTAR-calls.sh`: Script de shell para ejecutar pruebas relacionadas con búsqueda de caminos.
+  - `ASTAR-tests/`: Directorio con ficheros de prueba para A*.
+  - `ASTARRodaje.py`: Script en Python para resolver problemas de búsqueda de caminos usando el algoritmo A*.
+- `.gitignore`: Especifica archivos y directorios que Git debe ignorar.
+- `requirements.txt`: Lista de dependencias del proyecto.
 
-## Installation
+## Instalación
 
-To set up the environment and install the dependencies, follow these steps:
+Para preparar el entorno e instalar las dependencias:
 
-1. Clone the repository:
+1. Clona el repositorio:
+
    ```bash
    git clone https://github.com/liangjizhu/heuristica.git
    cd heuristica
    ```
 
-2. Create a virtual environment:
+2. Crea un entorno virtual:
+
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
    ```
 
-3. Install the dependencies:
+3. Instala las dependencias:
+
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+## Uso
 
-### Running Constraint Satisfaction Problem Scripts
+### Ejecutar scripts de satisfacción de restricciones (CSP)
 
-To run the constraint satisfaction problem scripts, use the following commands:
+Para ejecutar los scripts de CSP:
 
 - `alumnos.py`:
+
   ```bash
   python enunciado/alumnos.py
   ```
 
 - `n-queens.py`:
+
   ```bash
   python enunciado/n-queens.py
   ```
 
 - `n-queens-fun.py`:
+
   ```bash
   python enunciado/n-queens-fun.py
   ```
 
 - `sum-words.py`:
+
   ```bash
   python enunciado/sum-words.py
   ```
 
-### Running Maintenance Scheduling Problem Script
+### Ejecutar el script de planificación de mantenimiento
 
-To run the maintenance scheduling problem script, use the following command:
+Para ejecutar el script de mantenimiento:
+
 ```bash
 python parte-1/CSPMaintenance.py <ruta_fichero_entrada>
 ```
 
-### Running Pathfinding Problem Script
+### Ejecutar el script de búsqueda de caminos
 
-To run the pathfinding problem script, use the following command:
+Para ejecutar el script de búsqueda de caminos:
+
 ```bash
 python parte-2/ASTARRodaje.py <path mapa.csv> <num-h>
 ```
 
-### Running Tests
+### Ejecutar las pruebas
 
-To run the tests, use the following commands:
+Para ejecutar las pruebas:
 
-- Constraint Satisfaction Problem Tests:
+- Pruebas de CSP:
+
   ```bash
   bash parte-1/CSP-calls.sh
   ```
 
-- Pathfinding Problem Tests:
+- Pruebas de A*:
+
   ```bash
   bash parte-2/ASTAR-calls.sh
   ```
